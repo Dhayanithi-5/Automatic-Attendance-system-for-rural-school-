@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Take Attendance{% endblock %}
+{% block content %}
+  <h1>Take Attendance</h1>
+  <p class="subtitle">Live face recognition — students are marked present automatically the moment they are recognised.</p>
+
+  {% if not trained %}
+    <div class="card">
+      <div class="empty">
+        &#9888; The recognition model hasn't been trained yet.<br>
+        Go to <a href="{{ url_for('students') }}" style="color:var(--green-dark);text-decoration:underline;">Students</a>,
+        register at least one student, then click "Train Recognition Model".
+      </div>
+    </div>
+  {% else %}
+  <div class="card">
+    <div class="video-wrap">
+      <img src="{{ url_for('video_feed_attendance') }}" width="640" height="480" alt="camera feed">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Just Marked</h2>
+    <ul class="log-list" id="log">
+      <li class="empty" style="background:none;">Waiting for recognised faces...</li>
+    </ul>
+  </div>
+
+  <script>
+    const logEl = document.getElementById('log');
+    setInterval(async () => {
+      try {
+        const res = await fetch("{{ url_for('attendance_log_route') }}");
+        const items = await res.json();
+        if (items.length) {
+          logEl.innerHTML = items.map(i => `<li>${i}</li>`).join('');
+        }
+      } catch (e) {}
+    }, 1200);
+  </script>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+  <h1>Attendance Reports</h1>
+  <p class="subtitle">Filter and export attendance records as CSV for record-keeping.</p>
+
+  <div class="card">
+    <form method="GET" class="filters">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" name="date" value="{{ date_filter }}">
+      </div>
+      <div class="form-group">
+        <label>Class</label>
+        <select name="class_name">
+          <option value="">All Classes</option>
+          {% for c in all_classes %}
+          <option value="{{ c }}" {{ 'selected' if c == class_filter }}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn">Filter</button>
+      <a href="{{ url_for('export_csv', date=date_filter, class_name=class_filter) }}" class="btn secondary">Export CSV</a>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Records ({{ records|length }})</h2>
+    {% if records %}
+    <table>
+      <tr><th>Student ID</th><th>Name</th><th>Class</th><th>Date</th><th>Time</th><th>Status</th></tr>
+      {% for r in records %}
+      <tr>
+        <td>{{ r.student_id }}</td>
+        <td>{{ r.name }}</td>
+        <td>{{ r.class }}</td>
+        <td>{{ r.date }}</td>
+        <td>{{ r.time }}</td>
+        <td><span class="badge present">{{ r.status }}</span></td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <div class="empty">No attendance records match this filter.</div>
+    {% endif %}
+  </div>
+{% endblock %}

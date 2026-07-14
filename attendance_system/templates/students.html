@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block content %}
+  <h1>Students</h1>
+  <p class="subtitle">Manage registered students and train the recognition model</p>
+
+  <div class="card">
+    <a href="{{ url_for('register') }}" class="btn">+ Register New Student</a>
+    <a href="{{ url_for('train') }}" class="btn orange">
+      {{ 'Re-train Recognition Model' if trained else 'Train Recognition Model' }}
+    </a>
+    {% if not trained %}
+      <span class="hint" style="display:block;margin-top:10px;">
+        &#9888; Model not trained yet. After registering students, click "Train Recognition Model" so attendance can recognise their faces.
+      </span>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Registered Students ({{ students|length }})</h2>
+    {% if students %}
+    <table>
+      <tr><th>Student ID</th><th>Name</th><th>Class</th><th>Roll No.</th><th>Guardian Phone</th><th>Photos</th><th></th></tr>
+      {% for s in students %}
+      <tr>
+        <td>{{ s.student_id }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.class }}</td>
+        <td>{{ s.roll_no }}</td>
+        <td>{{ s.guardian_phone }}</td>
+        <td>{{ s.photos_captured }}</td>
+        <td>
+          <a href="{{ url_for('delete_student', student_id=s.student_id) }}"
+             class="btn danger small"
+             onclick="return confirm('Delete {{ s.name }}? This cannot be undone.');">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <div class="empty">No students registered yet.</div>
+    {% endif %}
+  </div>
+{% endblock %}

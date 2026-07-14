@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <h1>Dashboard</h1>
+  <p class="subtitle">Overview of today, {{ moment if moment else '' }}</p>
+
+  <div class="grid-stats">
+    <div class="stat">
+      <div class="num">{{ stats.total_students }}</div>
+      <div class="label">Total Registered Students</div>
+    </div>
+    <div class="stat">
+      <div class="num">{{ stats.present_today }}</div>
+      <div class="label">Present Today</div>
+    </div>
+    <div class="stat absent">
+      <div class="num">{{ stats.absent_today }}</div>
+      <div class="label">Absent Today</div>
+    </div>
+    <div class="stat orange">
+      <div class="num">{{ stats.total_classes }}</div>
+      <div class="label">Classes</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Quick Actions</h2>
+    <a href="{{ url_for('attendance') }}" class="btn">Take Attendance</a>
+    <a href="{{ url_for('register') }}" class="btn secondary">Register New Student</a>
+    <a href="{{ url_for('reports') }}" class="btn secondary">View Reports</a>
+  </div>
+
+  <div class="card">
+    <h2>Today's Attendance</h2>
+    {% if today_attendance %}
+    <table>
+      <tr><th>Student ID</th><th>Name</th><th>Class</th><th>Time</th><th>Status</th></tr>
+      {% for r in today_attendance %}
+      <tr>
+        <td>{{ r.student_id }}</td>
+        <td>{{ r.name }}</td>
+        <td>{{ r.class }}</td>
+        <td>{{ r.time }}</td>
+        <td><span class="badge present">{{ r.status }}</span></td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <div class="empty">No attendance marked yet today. Go to "Take Attendance" to begin.</div>
+    {% endif %}
+  </div>
+{% endblock %}

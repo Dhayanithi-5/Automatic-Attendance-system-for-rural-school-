@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Register Student{% endblock %}
+{% block content %}
+  <h1>Register New Student</h1>
+  <p class="subtitle">Step 1 of 2 — enter details, then capture face photos with the webcam</p>
+
+  <div class="card" style="max-width:520px;">
+    <form method="POST">
+      <div class="form-group">
+        <label>Student ID (unique, e.g. admission number)</label>
+        <input type="text" name="student_id" required>
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="name" required>
+      </div>
+      <div class="form-group">
+        <label>Class / Grade</label>
+        <input type="text" name="class_name" placeholder="e.g. Class 5">
+      </div>
+      <div class="form-group">
+        <label>Roll Number</label>
+        <input type="text" name="roll_no">
+      </div>
+      <div class="form-group">
+        <label>Guardian Phone (optional)</label>
+        <input type="text" name="guardian_phone" placeholder="for SMS attendance alerts, if available">
+      </div>
+      <button type="submit" class="btn">Save &amp; Continue to Face Capture</button>
+    </form>
+  </div>
+{% endblock %}
